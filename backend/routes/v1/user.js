@@ -21,7 +21,7 @@ router.get('/:id', (req, res)=>{
     });
 });
 
-router.post('/',function(req,res){
+router.post('/create',function(req,res){
   var User = new UserModel();
 
   User.name = req.body.name;
@@ -37,7 +37,47 @@ router.post('/',function(req,res){
   });
 });
 
-router.delete('/:id', (req, res)=>{
+router.post('/search',function(req,res){
+  const query = {};
+  if(req.body.name){
+    query.name = req.body.name;
+  }
+  if(req.body.age){
+    query.age = req.body.age;
+  }
+  UserModel
+    .find(query, (err, users)=>{
+      if(err){
+        res.send(err);
+      }else{
+        res.json(users);
+      }
+    });
+});
+
+router.put('/update/:id', (req, res)=>{
+  var UserId = req.params.id;
+  UserModel
+    .findById(UserId, (err, user)=>{
+      if(err){
+        res.send(err);
+      }else{
+        user.name = req.body.name;
+        user.bio = req.body.bio;
+        user.age = req.body.age;
+
+        user.save((err)=>{
+          if(err){
+            res.send(err);
+          }else{
+            res.json({messabe: 'Success!'});
+          }
+        });
+      }
+    });
+});
+
+router.delete('/delete/:id', (req, res)=>{
   var UserId = req.params.id;
   UserModel
     .remove({_id: UserId})
