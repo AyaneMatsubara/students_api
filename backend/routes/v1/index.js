@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res)=>{
-  res.json({
-    message: 'Hello!'
-  });
-});
+router.use('/user', require('./user.js'));
+router.use('/univ', require('./univ.js'));
 
 module.exports = router;
