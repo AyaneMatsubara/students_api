@@ -1,5 +1,6 @@
 var express   = require('express');
 var router    = express.Router();
+var moment = require('moment');
 var UserModel = require('../../models/userModel.js');
 
 router.get('/', (req, res)=>{
@@ -26,6 +27,11 @@ router.post('/create',function(req,res){
   User.bio = req.body.bio;
   User.age = req.body.age;
   User.univ = req.body.univ;
+  User.birth = moment()
+              .year(req.body.year)
+              .month(req.body.month - 1)
+              .date(req.body.date)
+              .format('YYYY年 M月 D日');
 
   User.save(function(err) {
     if (err){
