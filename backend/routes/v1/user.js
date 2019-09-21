@@ -1,8 +1,6 @@
 var express   = require('express');
 var router    = express.Router();
 var UserModel = require('../../models/userModel.js');
-var UnivModel = require('../../models/univModel.js');
-const mongoose = require('mongoose');
 
 router.get('/', (req, res)=>{
   UserModel
@@ -22,11 +20,12 @@ router.get('/:id', (req, res)=>{
 });
 
 router.post('/create',function(req,res){
-  var User = new UserModel();
+  const User = new UserModel();
 
   User.name = req.body.name;
   User.bio = req.body.bio;
   User.age = req.body.age;
+  User.univ = req.body.univ;
 
   User.save(function(err) {
     if (err){

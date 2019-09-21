@@ -1,8 +1,7 @@
 var express   = require('express');
 var router    = express.Router();
-var UserModel = require('../../models/userModel.js');
 var UnivModel = require('../../models/univModel.js');
-const mongoose = require('mongoose');
+var UserModel = require('../../models/userModel.js');
 
 router.get('/', (req, res)=>{
   UnivModel
@@ -16,17 +15,29 @@ router.get('/:id', (req, res)=>{
   var UnivId = req.params.id;
   UnivModel
     .findById(UnivId)
+    .lean()
     .then((univ)=>{
-        //res.json(univ);
-        res.send(univ.students)
+        const students = [];
+        UserModel
+          .find({ univ: univ.name })
+          .lean()
+          .exec((err, user)=>{
+            if (err){
+              res.send(err);
+            } else {
+              students.push(user);
+              univ.students = students;
+
+              res.send(univ);
+            }
+          });
     });
 });
 
-router.post('/',function(req,res){
+router.post('/create',function(req,res){
   var Univ = new UnivModel();
 
   Univ.name = req.body.name;
-  Univ.students = [];
 
   Univ.save(function(err) {
     if (err){
@@ -37,7 +48,7 @@ router.post('/',function(req,res){
   });
 });
 
-router.delete('/:id', (req, res)=>{
+router.delete('/delete/:id', (req, res)=>{
   var UnivId = req.params.id;
   UnivModel
     .remove({_id: UnivId})

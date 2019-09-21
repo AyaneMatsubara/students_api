@@ -7,7 +7,7 @@ var  UserSchema = new Schema({
   bio: String,
   age: Number,
   //birth: String,
-  univ: { type: Schema.Types.ObjectId, ref:'UnivModel' }
+  univ: String
 });
 
 module.exports = mongoose.model('UserModel', UserSchema);
