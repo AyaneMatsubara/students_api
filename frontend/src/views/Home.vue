@@ -37,6 +37,7 @@
 
     <div v-for="student in students">
       <p>{{ student.name }} <span>{{ student.age }}</span></p>
+      <button type="button" name="button" v-on:click="deleteStudent(student._id)">delete this student data</button>
     </div>
 
   </div>
@@ -82,6 +83,10 @@ export default {
           date: parseInt(this.date),
           univ: this.univ
         })
+    },
+    deleteStudent: async function(studentId){
+      await axios.delete('http://localhost:3000/api/v1/user/delete/' + studentId);
+      await this.getStudents();
     }
   }
 }
