@@ -11,26 +11,22 @@
         <input type="text" v-model="bio"><span> {{ bio }}</span>
       </tr>
       <tr>
-        <input type="text" v-model="univ"><span> {{ univ }}</span>
-      </tr>
-      <tr>
-        <select v-model="age">
-          <option value="18">18</option>
-          <option value="19">19</option>
-          <option value="20">20</option>
+        <select v-model="univ">
+          <option v-for="univ in univList">{{ univ.name }}</option>
         </select>
       </tr>
       <tr>
+        <input type="number" v-model="age" v-on:blur="ageValidate">
+      </tr>
+      <tr>
         <select v-model="year">
-          <option value="2001">2001</option>
-          <option value="2000">2000</option>
-          <option value="1999">1999</option>
+          <option v-for="year in 16">{{ year + 1989 }}</option>
         </select>
         <select v-model="month">
           <option v-for="month in 12" v-bind:value="month">{{ month }}</option>
         </select>
         <select v-model="date">
-          <option v-for="date in 30" v-bind:value="date">{{ date }}</option>
+          <option v-for="date in lastDate" v-bind:value="date">{{ date }}</option>
         </select>
       </tr>
     </table>
@@ -58,10 +54,23 @@ export default {
       name: 'name',
       bio: 'bio',
       age: '',
+      isAgeOk: true,
       year: '',
       month: '',
       date: '',
-      univ: 'univ'
+      univList: [],
+      univ: ''
+    }
+  },
+  computed: {
+    lastDate: function(){
+      if(this.year!='' && this.month!=''){
+        const day = new Date(this.year, this.month, 0);
+        const lastDate = Number(day.getDate());
+        return lastDate;
+      }else{
+        return 31;
+      }
     }
   },
   methods: {
@@ -83,11 +92,28 @@ export default {
           date: parseInt(this.date),
           univ: this.univ
         })
+      await this.getStudents();
     },
     deleteStudent: async function(studentId){
       await axios.delete('http://localhost:3000/api/v1/user/delete/' + studentId);
       await this.getStudents();
+    },
+    ageValidate: function(){
+      const pattern = /^([1-9]\d*|0)$/;
+      if(pattern.test(this.age)){
+        this.isAgeOk = true;
+      }else{
+        this.isAgeOk = false
+      }
+      console.log(this.isAgeOk);
     }
-  }
+  },
+  mounted: async function() {
+      await axios
+        .get('http://localhost:3000/api/v1/univ/')
+        .then((res)=>{
+          this.univList = res.data
+        });
+    }
 }
 </script>
