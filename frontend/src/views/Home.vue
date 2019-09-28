@@ -41,7 +41,8 @@
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
-import axios from 'axios'
+import axios from'axios'
+import moment from 'moment'
 
 export default {
   name: 'home',
@@ -64,6 +65,7 @@ export default {
   },
   computed: {
     lastDate: function(){
+      console.log('lastDate');
       if(this.year!='' && this.month!=''){
         const day = new Date(this.year, this.month, 0);
         const lastDate = Number(day.getDate());
@@ -74,25 +76,19 @@ export default {
     }
   },
   methods: {
-    getStudents: async function(){
-      await axios
-        .get('http://localhost:3000/api/v1/user/')
-        .then((res)=>{
-          this.students = res.data
-        });
+    getStudents: function(){
+      this.students = this.$store.getters['user/users'];
     },
     postStudent: async function(){
-      await axios
-        .post('http://localhost:3000/api/v1/user/create', {
-          name: this.name,
-          bio: this.bio,
-          age: parseInt(this.age),
-          year: parseInt(this.year),
-          month: parseInt(this.month),
-          date: parseInt(this.date),
-          univ: this.univ
-        })
-      await this.getStudents();
+      const birth = moment().year(this.year).month(this.month - 1).date(this.date).format('YYYY年 M月 D日');
+      const payload = {
+        name: this.name,
+        bio: this.bio,
+        age: parseInt(this.age),
+        birth: birth,
+        univ: this.univ
+      }
+      await this.$store.dispatch('user/postStudent', payload);
     },
     deleteStudent: async function(studentId){
       await axios.delete('http://localhost:3000/api/v1/user/delete/' + studentId);
@@ -109,11 +105,12 @@ export default {
     }
   },
   mounted: async function() {
-      await axios
-        .get('http://localhost:3000/api/v1/univ/')
-        .then((res)=>{
-          this.univList = res.data
-        });
-    }
+    await this.$store.dispatch('user/getStudents');
+    /*await axios
+      .get('http://localhost:3000/api/v1/univ/')
+      .then((res)=>{
+        this.univList = res.data
+      });*/
+  }
 }
 </script>
