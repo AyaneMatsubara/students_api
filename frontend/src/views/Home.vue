@@ -106,11 +106,9 @@ export default {
   },
   mounted: async function() {
     await this.$store.dispatch('user/getStudents');
-    /*await axios
-      .get('http://localhost:3000/api/v1/univ/')
-      .then((res)=>{
-        this.univList = res.data
-      });*/
+    this.students = this.$store.getters['user/users'];
+    await this.$store.dispatch('univ/getUnivs');
+    this.univList = this.$store.getters['univ/univs'];
   }
 }
 </script>
