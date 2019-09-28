@@ -11,6 +11,9 @@ const mutations = {
       state.users = payload;
     }
   },
+  pushUsers(state, payload){
+    state.users.push(payload);
+  },
   setShowingUser(state, payload){
     if(payload){
       state.showingUser = payload;
@@ -44,7 +47,7 @@ const actions = {
         birth: payload.birth,
         univ: payload.univ
       });
-    state.users.push(payload);
+    context.commit('pushUsers', payload);
   },
   setShowingUser(context, payload){
     context.commit('setShowingUser', payload);
