@@ -14,6 +14,10 @@ const mutations = {
   pushUsers(state, payload){
     state.users.push(payload);
   },
+  deleteUser(state, payload){
+    const newUsers = state.users.filter((user, payload)=>{ return user._id != payload });
+    state.users = newUsers;
+  },
   setShowingUser(state, payload){
     if(payload){
       state.showingUser = payload;
@@ -26,7 +30,8 @@ const getters = {
     return state.users;
   },
   showingUser(state){
-    return state.showingUser;
+    const showingUser = state.users.filter((user)=>{ return user._id == state.showingUser });
+    return showingUser[0];
   }
 };
 
@@ -49,7 +54,11 @@ const actions = {
       });
     context.commit('pushUsers', payload);
   },
-  setShowingUser(context, payload){
+  async deleteStudent(context, payload){
+    await axios.delete('http://localhost:3000/api/v1/user/delete/' + payload);
+    context.commit('deleteUser', payload);
+  },
+  setShowingStudent(context, payload){
     context.commit('setShowingUser', payload);
   }
 };
