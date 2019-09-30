@@ -25,7 +25,9 @@ router.post('/create',function(req,res){
   User.name = req.body.name;
   User.bio = req.body.bio;
   User.age = req.body.age;
-  User.birth = req.body.birth;
+  User.year = req.body.year;
+  User.month = req.body.month;
+  User.date = req.body.date;
   User.univ = req.body.univ;
 
   User.save(function(err) {
@@ -65,6 +67,10 @@ router.put('/update/:id', (req, res)=>{
         user.name = req.body.name;
         user.bio = req.body.bio;
         user.age = req.body.age;
+        user.year = req.body.year;
+        user.month = req.body.month;
+        user.date = req.body.date;
+        user.univ = req.body.univ;
 
         user.save((err)=>{
           if(err){

@@ -6,7 +6,9 @@ var  UserSchema = new Schema({
   //image: String,
   bio: String,
   age: Number,
-  birth: String,
+  year: String,
+  month: String,
+  date: String,
   univ: String
 });
 

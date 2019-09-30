@@ -1,6 +1,6 @@
 <template>
   <div class="create">
-    <button type="button" name="button" v-on:click="postStudent">post students data!</button>
+    <button type="button" name="button" v-on:click="updateStudent(student._id)">update students data!</button>
 
     <table class="form" style="width: 500px; margin: 50px auto">
       <tr>
@@ -15,7 +15,7 @@
         </select>
       </tr>
       <tr>
-        <input type="number" v-model="age" v-on:blur="ageValidate">
+        <input type="number" v-model="age" v-on:blur="ageValidate"><span> {{ age }}</span>
       </tr>
       <tr>
         <select v-model="year">
@@ -34,12 +34,13 @@
 
 <script>
 import axios from'axios'
+import moment from 'moment'
 
 export default {
-  name: 'create',
-  data() {
+  name: 'edit',
+  data(){
     return {
-      name: 'name',
+      name: '',
       bio: 'bio',
       age: '',
       isAgeOk: true,
@@ -51,6 +52,9 @@ export default {
     }
   },
   computed: {
+    student(){
+      return this.$store.getters['user/showingUser'];
+    },
     lastDate(){
       console.log('lastDate');
       if(this.year!='' && this.month!=''){
@@ -63,7 +67,7 @@ export default {
     }
   },
   methods: {
-    postStudent: function(){
+    updateStudent: function(_id){
       const payload = {
         name: this.name,
         bio: this.bio,
@@ -71,9 +75,10 @@ export default {
         year: this.year,
         month: this.month,
         date: this.date,
-        univ: this.univ
+        univ: this.univ,
+        id: _id
       }
-      this.$store.dispatch('user/postStudent', payload);
+      this.$store.dispatch('user/updateStudent', payload);
       setTimeout(()=>{
         this.$router.push('/');
       }, 2000);
@@ -88,9 +93,15 @@ export default {
       console.log(this.isAgeOk);
     }
   },
-  mounted: async function() {
-    await this.$store.dispatch('univ/getUnivs');
+  mounted: function(){
+    this.name = this.student.name;
+    this.bio = this.student.bio;
+    this.age = this.student.age;
+    this.year = this.student.year;
+    this.month = this.student.month;
+    this.date = this.student.date;
     this.univList = this.$store.getters['univ/univs'];
+    this.univ = this.student.univ;
   }
 }
 </script>

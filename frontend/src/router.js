@@ -22,6 +22,11 @@ export default new Router({
       path: '/show',
       name: 'show',
       component: () => import('./views/Show.vue')
+    },
+    {
+      path: '/edit',
+      name: 'edit',
+      component: () => import('./views/Edit.vue')
     }
   ]
 })

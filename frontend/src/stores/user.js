@@ -49,7 +49,9 @@ const actions = {
         name: payload.name,
         bio: payload.bio,
         age: parseInt(payload.age),
-        birth: payload.birth,
+        year: payload.year,
+        month: payload.month,
+        date: payload.date,
         univ: payload.univ
       });
     context.commit('pushUsers', payload);
@@ -57,6 +59,18 @@ const actions = {
   async deleteStudent(context, payload){
     await axios.delete('http://localhost:3000/api/v1/user/delete/' + payload);
     context.commit('deleteUser', payload);
+  },
+  async updateStudent(context, payload){
+    await axios
+      .put('http://localhost:3000/api/v1/user/update/' + payload.id , {
+        name: payload.name,
+        bio: payload.bio,
+        age: parseInt(payload.age),
+        year: payload.year,
+        month: payload.month,
+        date: payload.date,
+        univ: payload.univ
+      });
   },
   setShowingStudent(context, payload){
     context.commit('setShowingUser', payload);
