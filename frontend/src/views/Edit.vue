@@ -93,13 +93,14 @@ export default {
       console.log(this.isAgeOk);
     }
   },
-  mounted: function(){
+  mounted: async function(){
     this.name = this.student.name;
     this.bio = this.student.bio;
     this.age = this.student.age;
     this.year = this.student.year;
     this.month = this.student.month;
     this.date = this.student.date;
+    await this.$store.dispatch('univ/getUnivs');
     this.univList = this.$store.getters['univ/univs'];
     this.univ = this.student.univ;
   }
