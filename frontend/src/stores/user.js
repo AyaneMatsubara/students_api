@@ -52,7 +52,8 @@ const actions = {
         year: payload.year,
         month: payload.month,
         date: payload.date,
-        univ: payload.univ
+        univ: payload.univ,
+        image: payload.image
       });
     context.commit('pushUsers', payload);
   },

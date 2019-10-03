@@ -1,5 +1,8 @@
 <template>
   <div class="show">
+    <div class="">
+      <img :src="image_src"/>
+    </div>
     <p>{{ student.name }}</p>
     <p>{{ student.bio }}</p>
     <p>{{ student.age }}</p>
@@ -16,9 +19,13 @@ import axios from'axios'
 
 export default {
   name: 'show',
+
   computed: {
     student(){
       return this.$store.getters['user/showingUser'];
+    },
+    image_src(){
+      return require("@/assets/user/" + this.student.image)
     }
   },
   methods: {

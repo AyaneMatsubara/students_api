@@ -9,7 +9,8 @@ var  UserSchema = new Schema({
   year: String,
   month: String,
   date: String,
-  univ: String
+  univ: String,
+  image: String
 });
 
 module.exports = mongoose.model('UserModel', UserSchema);

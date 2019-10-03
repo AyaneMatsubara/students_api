@@ -1,6 +1,18 @@
 var express   = require('express');
 var router    = express.Router();
 var UserModel = require('../../models/userModel.js');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './../frontend/src/assets/user')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({ storage: storage }).single('file')
+
 
 router.get('/', (req, res)=>{
   UserModel
@@ -29,6 +41,7 @@ router.post('/create',function(req,res){
   User.month = req.body.month;
   User.date = req.body.date;
   User.univ = req.body.univ;
+  User.image = req.body.image;
 
   User.save(function(err) {
     if (err){
@@ -92,6 +105,31 @@ router.delete('/delete/:id', (req, res)=>{
         message: 'Success!'
       });
     });
+});
+
+
+router.post('/image/:name', upload, (req, res) => {
+  console.log('image upload');
+  var UserName = req.params.name;
+  console.log(UserName);
+  upload(req, res, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      UserModel
+        .find({name: UserName}, (err, user)=>{
+          console.log(user);
+          user[0].image = res.req.file.filename;
+          user[0].save((err)=>{
+            if(err){
+              res.send(err);
+            }else{
+              res.json({messabe: 'Success!'});
+            }
+          });
+        });
+    }
+  })
 });
 
 module.exports = router;
