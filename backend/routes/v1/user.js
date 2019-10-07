@@ -8,7 +8,8 @@ const storage = multer.diskStorage({
     cb(null, './../frontend/src/assets/user')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    const imageName = `${Math.random().toString(36).slice(-9)}_${Date.now()}.png`
+    cb(null, imageName)
   }
 })
 const upload = multer({ storage: storage }).single('file')
