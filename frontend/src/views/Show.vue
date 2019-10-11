@@ -1,6 +1,6 @@
 <template>
   <div class="show">
-    <div class="">
+    <div class="" v-if="student.image != ''">
       <img :src="image_src"/>
     </div>
     <p>{{ student.name }}</p>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import axios from'axios'
+import axios from 'axios'
 
 export default {
   name: 'show',
@@ -25,7 +25,12 @@ export default {
       return this.$store.getters['user/showingUser'];
     },
     image_src(){
-      return require("@/assets/user/" + this.student.image)
+      if(this.student.image){
+        return require("@/assets/user/" + this.student.image)
+      }else{
+        console.log('image deleted');
+        return ''
+      }
     }
   },
   methods: {

@@ -2,6 +2,7 @@ var express   = require('express');
 var router    = express.Router();
 var UserModel = require('../../models/userModel.js');
 const multer = require('multer');
+const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -100,7 +101,16 @@ router.put('/update/:id', (req, res)=>{
 router.delete('/delete/:id', (req, res)=>{
   var UserId = req.params.id;
   UserModel
-    .remove({_id: UserId})
+    .find({_id: UserId}, (err, user)=>{
+      try {
+        if(fs.statSync("./../frontend/src/assets/user/" + user[0].image)){
+          fs.unlinkSync("./../frontend/src/assets/user/" + user[0].image);
+        }
+      }catch(err){
+        console.log(err);
+      }
+    })
+    .deleteOne({_id: UserId})
     .then(()=>{
       res.json({
         message: 'Success!'
