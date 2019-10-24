@@ -123,13 +123,15 @@ export default {
     async submitClick(e) {
       try {
         const formData = new FormData();
-        formData.append("file", this.imageFile[0]);
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data",
-          }
-        };
-        await axios.post("http://localhost:3000/api/v1/user/image/" + this.name , formData, config);
+        if(this.imageFile[0]){
+          formData.append("file", this.imageFile[0]);
+          const config = {
+            headers: {
+              "content-type": "multipart/form-data",
+            }
+          };
+          await axios.post("http://localhost:3000/api/v1/user/image/" + this.name , formData, config);
+        }
       } catch (error) {
         console.log(error);
       }
