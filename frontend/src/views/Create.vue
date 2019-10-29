@@ -42,7 +42,6 @@
             alt=""
           />
         </div>
-
     </form>
   </div>
 </template>

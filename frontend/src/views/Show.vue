@@ -1,7 +1,7 @@
 <template>
   <div class="show">
-    <div class="" v-if="student.image != ''">
-      <img :src="image_src"/>
+    <div class="">
+      <img :src="image_src()"/>
     </div>
     <p>{{ student.name }}</p>
     <p>{{ student.bio }}</p>
@@ -23,14 +23,6 @@ export default {
   computed: {
     student(){
       return this.$store.getters['user/showingUser'];
-    },
-    image_src(){
-      if(this.student.image){
-        return require("@/assets/user/" + this.student.image)
-      }else{
-        console.log('image deleted');
-        return ''
-      }
     }
   },
   methods: {
@@ -39,6 +31,13 @@ export default {
       setTimeout(()=>{
         this.$router.push('/');
       }, 1500);
+    },
+    image_src(){
+      if(this.student.image != ""){
+        return require("@/assets/user/" + this.student.image);
+      }else if(this.student.image == ""){
+        return require("@/assets/user/user.png");
+      }
     }
   }
 }

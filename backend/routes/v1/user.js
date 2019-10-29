@@ -143,4 +143,34 @@ router.post('/image/:name', upload, (req, res) => {
   })
 });
 
+router.post('/image/update/:name', upload, (req, res) => {
+  console.log('image upload');
+  var UserName = req.params.name;
+  console.log(UserName);
+  upload(req, res, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      UserModel
+        .find({name: UserName}, (err, user)=>{
+          try {
+            if(fs.statSync("./../frontend/src/assets/user/" + user[0].image)){
+              fs.unlinkSync("./../frontend/src/assets/user/" + user[0].image);
+            }
+          }catch(err){
+            console.log(err);
+          }
+          user[0].image = res.req.file.filename;
+          user[0].save((err)=>{
+            if(err){
+              res.send(err);
+            }else{
+              res.json({messabe: 'Success!'});
+            }
+          });
+        });
+    }
+  })
+});
+
 module.exports = router;
