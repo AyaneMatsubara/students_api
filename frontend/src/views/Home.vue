@@ -7,6 +7,7 @@
         </tr>
         <tr>
           <select v-model="univ">
+            <option value="">--</option>
             <option v-for="univ in univList">{{ univ.name }}</option>
           </select>
         </tr>
@@ -15,12 +16,15 @@
         </tr>
         <tr>
           <select v-model="year">
+            <option value="">--</option>
             <option v-for="year in 16">{{ year + 1989 }}</option>
           </select>
           <select v-model="month">
+            <option value="">--</option>
             <option v-for="month in 12" v-bind:value="month">{{ month }}</option>
           </select>
           <select v-model="date">
+            <option value="">--</option>
             <option v-for="date in lastDate" v-bind:value="date">{{ date }}</option>
           </select>
         </tr>
@@ -28,6 +32,10 @@
     </div>
     <button type="button" name="button" v-on:click="searchStudents">search students!</button>
     <button type="button" name="button" v-on:click="getStudents">reset students!</button>
+
+    <div class="">
+      {{ searchQuery }}
+    </div>
 
     <div v-for="(student, index) in students">
       <div class="">
@@ -63,7 +71,6 @@ export default {
       return this.$store.getters['user/users'];
     },
     lastDate(){
-      console.log('lastDate');
       if(this.year!='' && this.month!=''){
         const day = new Date(this.year, this.month, 0);
         const lastDate = Number(day.getDate());
@@ -71,6 +78,9 @@ export default {
       }else{
         return 31;
       }
+    },
+    searchQuery(){
+      return this.$store.getters['user/searchQuery'];
     }
   },
   methods: {

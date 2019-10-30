@@ -2,13 +2,15 @@ import axios from 'axios'
 
 const state = {
   users: [],
-  showingUser: null
+  showingUser: null,
+  searchQuery: null
 };
 
 const mutations = {
   setUsers(state, payload){
     if(payload){
       state.users = payload;
+      state.searchQuery = null;
     }
   },
   pushUsers(state, payload){
@@ -22,6 +24,9 @@ const mutations = {
     if(payload){
       state.showingUser = payload;
     }
+  },
+  setSearchQuery(state, payload){
+    state.searchQuery = payload;
   }
 };
 
@@ -32,6 +37,9 @@ const getters = {
   showingUser(state){
     const showingUser = state.users.filter((user)=>{ return user._id == state.showingUser });
     return showingUser[0];
+  },
+  searchQuery(state){
+    return state.searchQuery;
   }
 };
 
@@ -97,6 +105,7 @@ const actions = {
       .post('http://localhost:3000/api/v1/user/search/', query)
       .then((res)=>{
         context.commit('setUsers', res.data);
+        context.commit('setSearchQuery', query);
       });
   },
   setShowingStudent(context, payload){

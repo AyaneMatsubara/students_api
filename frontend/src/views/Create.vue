@@ -20,12 +20,15 @@
         </tr>
         <tr>
           <select v-model="year">
+            <option value="">--</option>
             <option v-for="year in 16">{{ year + 1989 }}</option>
           </select>
           <select v-model="month">
+            <option value="">--</option>
             <option v-for="month in 12" v-bind:value="month">{{ month }}</option>
           </select>
           <select v-model="date">
+            <option value="">--</option>
             <option v-for="date in lastDate" v-bind:value="date">{{ date }}</option>
           </select>
         </tr>
@@ -69,7 +72,6 @@ export default {
   },
   computed: {
     lastDate(){
-      console.log('lastDate');
       if(this.year!='' && this.month!=''){
         const day = new Date(this.year, this.month, 0);
         const lastDate = Number(day.getDate());
