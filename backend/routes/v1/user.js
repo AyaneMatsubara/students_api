@@ -160,7 +160,7 @@ router.post('/image/update/:name', upload, (req, res) => {
           }catch(err){
             console.log(err);
           }
-          user[0].image = res.req.file.filename;
+          user[0].image = req.file.filename;
           user[0].save((err)=>{
             if(err){
               res.send(err);
