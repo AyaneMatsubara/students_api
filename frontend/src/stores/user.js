@@ -73,6 +73,32 @@ const actions = {
         univ: payload.univ
       });
   },
+  async searchStudents(context, payload){
+    const query = {};
+    if(payload.name){
+      query.name = payload.name;
+    }
+    if(payload.age){
+      query.age = payload.age;
+    }
+    if(payload.year){
+      query.year = payload.year;
+    }
+    if(payload.month){
+      query.month = payload.month;
+    }
+    if(payload.date){
+      query.date = payload.date;
+    }
+    if(payload.univ){
+      query.univ = payload.univ;
+    }
+    await axios
+      .post('http://localhost:3000/api/v1/user/search/', query)
+      .then((res)=>{
+        context.commit('setUsers', res.data);
+      });
+  },
   setShowingStudent(context, payload){
     context.commit('setShowingUser', payload);
   }

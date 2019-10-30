@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage: storage }).single('file')
 
-
+//ユーザー一覧を返す
 router.get('/', (req, res)=>{
   UserModel
     .find()
@@ -24,6 +24,7 @@ router.get('/', (req, res)=>{
     });
 });
 
+//特定のユーザーの情報を返す
 router.get('/:id', (req, res)=>{
   var UserId = req.params.id;
   UserModel
@@ -33,6 +34,7 @@ router.get('/:id', (req, res)=>{
     });
 });
 
+//ユーザー新規作成
 router.post('/create',function(req,res){
   const User = new UserModel();
 
@@ -54,6 +56,7 @@ router.post('/create',function(req,res){
   });
 });
 
+//検索条件に合うユーザーを返す
 router.post('/search',function(req,res){
   const query = {};
   if(req.body.name){
@@ -61,6 +64,18 @@ router.post('/search',function(req,res){
   }
   if(req.body.age){
     query.age = req.body.age;
+  }
+  if(req.body.year){
+    query.year = req.body.year;
+  }
+  if(req.body.month){
+    query.month = req.body.month;
+  }
+  if(req.body.date){
+    query.date = req.body.date;
+  }
+  if(req.body.univ){
+    query.univ = req.body.univ;
   }
   UserModel
     .find(query, (err, users)=>{
@@ -72,6 +87,7 @@ router.post('/search',function(req,res){
     });
 });
 
+//画像以外のユーザー情報を更新
 router.put('/update/:id', (req, res)=>{
   var UserId = req.params.id;
   UserModel
@@ -98,6 +114,7 @@ router.put('/update/:id', (req, res)=>{
     });
 });
 
+//特定のユーザーを削除
 router.delete('/delete/:id', (req, res)=>{
   var UserId = req.params.id;
   UserModel
@@ -118,9 +135,8 @@ router.delete('/delete/:id', (req, res)=>{
     });
 });
 
-
+//ユーザーの画像を登録
 router.post('/image/:name', upload, (req, res) => {
-  console.log('image upload');
   var UserName = req.params.name;
   console.log(UserName);
   upload(req, res, (err) => {
@@ -129,7 +145,6 @@ router.post('/image/:name', upload, (req, res) => {
     } else {
       UserModel
         .find({name: UserName}, (err, user)=>{
-          console.log(user);
           user[0].image = res.req.file.filename;
           user[0].save((err)=>{
             if(err){
@@ -143,10 +158,9 @@ router.post('/image/:name', upload, (req, res) => {
   })
 });
 
+//ユーザーの画像を更新
 router.post('/image/update/:name', upload, (req, res) => {
-  console.log('image upload');
   var UserName = req.params.name;
-  console.log(UserName);
   upload(req, res, (err) => {
     if (err) {
       console.log(err);
